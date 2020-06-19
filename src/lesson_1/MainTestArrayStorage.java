@@ -1,18 +1,19 @@
 package lesson_1;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 public class MainTestArrayStorage {
     public static void main(String[] args) {
-        Resume r1 = new Resume(new Date(1990, 12, 22), 'М',  "Александр", "Александрович",
+
+        Resume r1 = new Resume(LocalDate.of(1990, 12, 22), 'М',  "Александр", "Александрович",
                 "Петров", "сварщик", "третий разряд");
-        Resume r2 = new Resume(new Date(1985, 05, 10), 'Ж',  "Диана", "Алексеевна",
+        Resume r2 = new Resume(LocalDate.of(1985, 05, 10), 'Ж',  "Диана", "Алексеевна",
                 "Пуговкина", "повар", "первая категория");
-        Resume r3 = new Resume(new Date(1992, 04, 07), 'М',  "Василий", "Викторович",
+        Resume r3 = new Resume(LocalDate.of(1992, 04, 07), 'М',  "Василий", "Викторович",
                 "Пушков", "программист", "middle c++");
-        Resume r4 = new Resume(new Date(1994, 11, 03), 'Ж',  "Наталья", "Михайловна",
+        Resume r4 = new Resume(LocalDate.of(1994, 11, 03), 'Ж',  "Наталья", "Михайловна",
                 "Кузнецова", "программист", "middle java");
-        Resume r5 = new Resume(new Date(1995, 12, 22), 'М',  "Николай", "Игоревич",
+        Resume r5 = new Resume(LocalDate.of(1995, 12, 22), 'М',  "Николай", "Игоревич",
                 "Скворцов", "менеджер по продажам", "региональная продажа сельхозтехники");
         ArrayStorage storage = new ArrayStorage();
         storage.save(r1);
