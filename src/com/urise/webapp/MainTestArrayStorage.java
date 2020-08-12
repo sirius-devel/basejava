@@ -1,4 +1,7 @@
-package lesson_1;
+package com.urise.webapp;
+
+import com.urise.webapp.storage.ArrayStorage;
+import com.urise.webapp.model.Resume;
 
 import java.time.LocalDate;
 
@@ -15,6 +18,8 @@ public class MainTestArrayStorage {
                 "Кузнецова", "программист", "middle java");
         Resume r5 = new Resume(LocalDate.of(1995, 12, 22), 'М',  "Николай", "Игоревич",
                 "Скворцов", "менеджер по продажам", "региональная продажа сельхозтехники");
+        Resume r6 = new Resume(LocalDate.of(1997, 12, 22), 'М',  "Антон", "Игоревич",
+                "Бержин", "сантехник", "");
         ArrayStorage storage = new ArrayStorage();
         storage.save(r1);
         storage.save(r2);
@@ -31,6 +36,13 @@ public class MainTestArrayStorage {
         }
         storage.delete(r3.getUuid().toString());
         System.out.println("Удаляем из хранилище резюме " + r3.getSurname());
+        printStorage(storage);
+        r5.setFirstName("Алексей");
+        System.out.println("Обновляем резюме " + r5.getSurname());
+        storage.update(r5);
+        printStorage(storage);
+        System.out.println("Обновляем резюме " + r6.getSurname());
+        storage.update(r6);
         printStorage(storage);
         System.out.println("Очищаем хранилище");
         storage.clear();

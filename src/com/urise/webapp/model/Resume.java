@@ -1,4 +1,4 @@
-package lesson_1;
+package com.urise.webapp.model;
 
 import java.time.LocalDate;
 import java.util.UUID;
@@ -13,11 +13,11 @@ public class Resume {
     private String profession;
     private String skills;
 
-    Resume() {
+    public Resume() {
         uuid = UUID.randomUUID();
     }
 
-    Resume(LocalDate birthday, char gender,  String firstName, String secondName,
+    public Resume(LocalDate birthday, char gender,  String firstName, String secondName,
            String surname, String profession, String skills) {
         uuid = UUID.randomUUID();
         this.birthday = birthday;

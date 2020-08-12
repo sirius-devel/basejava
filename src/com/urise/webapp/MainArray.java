@@ -1,5 +1,7 @@
-package lesson_1;
+package com.urise.webapp;
 
+import com.urise.webapp.model.Resume;
+import com.urise.webapp.storage.ArrayStorage;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -12,7 +14,7 @@ public class MainArray {
         ArrayStorage storage = new ArrayStorage();
 
         while (true) {
-            System.out.print("Введите одну из команд - (save uuid surname | get uuid | delete uuid | size | clear | exit): ");
+            System.out.print("Введите одну из команд - (save uuid surname | get uuid | update uuid | delete uuid | size | clear | exit): ");
             String[] params = reader.readLine().trim().toLowerCase().split(" ");
             if (params.length < 1 || params.length > 3) {
                 System.out.println("Неверная команда.");
@@ -32,6 +34,9 @@ public class MainArray {
                     break;
                 case "get":
                     System.out.println(storage.get(r.getUuid()));
+                    break;
+                case "update":
+                    storage.update(r);
                     break;
                 case "delete":
                     storage.delete(r.getUuid());
@@ -59,9 +64,7 @@ public class MainArray {
         System.out.println("Печатаем содержимое хранилища!");
         System.out.println("----------------------------------------");
         for(Resume resume : resumes) {
-            if (resume != null) {
-                System.out.println("Резюме " + resume.getFirstName() + " " + resume.getSecondName() + " " + resume.getSurname());
-            }
+            System.out.println("Резюме " + resume.getFirstName() + " " + resume.getSecondName() + " " + resume.getSurname());
         }
         System.out.println("----------------------------------------");
         System.out.println("Сейчас в хранилище " + storage.size() + " элементов");
