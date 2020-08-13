@@ -1,13 +1,15 @@
 package ru.javawebinar.basejava.storage;
 
 import ru.javawebinar.basejava.model.Resume;
+
 import java.util.Arrays;
 
-public class ArrayStorage extends AbstractArrayStorage {
+public class SortedArrayStorage extends AbstractArrayStorage {
+
 
     public void update(Resume r) {
         int index = getIndex(r.getUuid().toString());
-        if (index != -1) {
+        if (index >= 0) {
             storage[index] = r;
         } else {
             System.out.println("Ошибка -  вы пытаетесь обновить резюме, которого нет в базе.");
@@ -15,10 +17,13 @@ public class ArrayStorage extends AbstractArrayStorage {
     }
 
     public void save(Resume r) {
-        if (getIndex(r.getUuid().toString()) == -1) {
+        int index = getIndex(r.getUuid().toString());
+        if (index < 0) {
             size++;
             if (size <= storage.length) {
-                storage[size - 1] = r;
+                int insertionPoint = -index - 1;
+                System.arraycopy(storage, insertionPoint, storage, insertionPoint+1, size - 1 - insertionPoint);
+                storage[insertionPoint] = r;
             } else {
                 System.out.println("Ошибка - к сожалению, хранилище резюме полностью заполнено.");
             }
@@ -28,9 +33,9 @@ public class ArrayStorage extends AbstractArrayStorage {
         }
     }
 
-    public void delete(String uid) {
-        int index = getIndex(uid);
-        if (index != -1) {
+    public void delete(String uuid) {
+        int index = getIndex(uuid);
+        if (index >= 0) {
             System.arraycopy(storage, index + 1, storage, index, size - 1 - index);
             storage[size - 1] = null;
             size--;
@@ -40,13 +45,8 @@ public class ArrayStorage extends AbstractArrayStorage {
     }
 
     protected int getIndex(String uid) {
-        for(int i = 0; i < size; i++) {
-            Resume r = new Resume();
-            r.setUuid(uid);
-            if (storage[i].equals(r)) {
-                return i;
-            }
-        }
-        return -1;
+        Resume searchKey = new Resume();
+        searchKey.setUuid(uid);
+        return Arrays.binarySearch(storage, 0, size, searchKey);
     }
 }

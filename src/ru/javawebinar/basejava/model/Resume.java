@@ -3,7 +3,7 @@ package ru.javawebinar.basejava.model;
 import java.time.LocalDate;
 import java.util.UUID;
 
-public class Resume {
+public class Resume implements Comparable<Resume>{
     private UUID uuid;
 
     public Resume() {
@@ -40,5 +40,10 @@ public class Resume {
     @Override
     public int hashCode() {
         return uuid.hashCode();
+    }
+
+    @Override
+    public int compareTo(Resume resume) {
+        return uuid.compareTo(resume.uuid);
     }
 }
