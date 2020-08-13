@@ -4,28 +4,18 @@ import java.time.LocalDate;
 import java.util.UUID;
 
 public class Resume implements Comparable<Resume>{
-    private UUID uuid;
+    private String uuid;
 
-    public Resume() {
-        uuid = UUID.randomUUID();
-    }
-
-    public UUID getUuid() {
+    public String getUuid() {
         return uuid;
     }
 
     public void setUuid(String uuid) {
-        try {
-            this.uuid = UUID.fromString(uuid);
-        } catch (IllegalArgumentException e) {
-            this.uuid = UUID.randomUUID();
-            System.out.println("Был задан неверный формат уникального идентификатора uuid, поэтому был сгенерирован " +
-                    "случайный uid=" + this.uuid);
-        }
+        this.uuid = uuid;
     }
 
     public String toString() {
-        return uuid.toString();
+        return uuid;
     }
 
     @Override
