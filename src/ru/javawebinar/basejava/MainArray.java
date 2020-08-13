@@ -1,53 +1,54 @@
-package com.urise.webapp;
+package ru.javawebinar.basejava;
 
-import com.urise.webapp.model.Resume;
-import com.urise.webapp.storage.ArrayStorage;
+import ru.javawebinar.basejava.model.Resume;
+import ru.javawebinar.basejava.storage.ArrayStorage;
+import ru.javawebinar.basejava.storage.Storage;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
 public class MainArray {
+    private final static  Storage ARRAY_STORAGE = new ArrayStorage();
 
     public static void main(String[] args) throws IOException {
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-        ArrayStorage storage = new ArrayStorage();
 
         while (true) {
-	    Resume r = newResume();
-            System.out.print("Введите одну из команд - (save uuid surname | get uuid | update uuid | delete uuid | size | clear | exit): ");
+            Resume r = new Resume();
+            System.out.print("Введите одну из команд - (list | save uuid | get uuid | update uuid | delete uuid | size | clear | exit): ");
             String[] params = reader.readLine().trim().toLowerCase().split(" ");
-            if (params.length < 1 || params.length > 3) {
+            if (params.length < 1 || params.length > 2) {
                 System.out.println("Неверная команда.");
                 continue;
             }
             if (params.length == 2) {
                 r.setUuid(params[1].intern());
             }
-            if (params.length == 3) {
-                r.setSurname(params[2].intern());
-            }
 
             switch (params[0]) {
+                case "list":
+                    printStorage();
+                    break;
                 case "save":
-                    storage.save(r);
-                    printStorage(storage);
+                    ARRAY_STORAGE.save(r);
+                    printStorage();
                     break;
                 case "get":
-                    System.out.println(storage.get(r.getUuid()));
+                    System.out.println(ARRAY_STORAGE.get(r.getUuid().toString()));
                     break;
                 case "update":
-                    storage.update(r);
+                    ARRAY_STORAGE.update(r);
                     break;
                 case "delete":
-                    storage.delete(r.getUuid());
-                    printStorage(storage);
+                    ARRAY_STORAGE.delete(r.getUuid().toString());
+                    printStorage();
                     break;
                 case "size":
-                    System.out.println(storage.size());
+                    System.out.println(ARRAY_STORAGE.size());
                     break;
                 case "clear":
-                    storage.clear();
-                    printStorage(storage);
+                    ARRAY_STORAGE.clear();
+                    printStorage();
                     break;
                 case "exit":
                     return;
@@ -58,16 +59,16 @@ public class MainArray {
         }
     }
 
-    public static void printStorage(ArrayStorage storage) {
-        Resume[] resumes = storage.getAll();
+    public static void printStorage() {
+        Resume[] resumes = ARRAY_STORAGE.getAll();
 
         System.out.println("Печатаем содержимое хранилища!");
         System.out.println("----------------------------------------");
         for(Resume resume : resumes) {
-            System.out.println("Резюме " + resume.getFirstName() + " " + resume.getSecondName() + " " + resume.getSurname());
+            System.out.println(resume);
         }
         System.out.println("----------------------------------------");
-        System.out.println("Сейчас в хранилище " + storage.size() + " элементов");
+        System.out.println("Сейчас в хранилище " + ARRAY_STORAGE.size() + " элементов");
         System.out.println("----------------------------------------");
     }
 }

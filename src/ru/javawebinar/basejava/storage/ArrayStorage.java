@@ -1,19 +1,34 @@
-package com.urise.webapp.storage;
+package ru.javawebinar.basejava.storage;
 
-import com.urise.webapp.model.Resume;
+import ru.javawebinar.basejava.model.Resume;
 import java.util.Arrays;
 
-public class ArrayStorage {
+public class ArrayStorage implements Storage {
+    private static final  int STORAGE_LIMIT = 10000;
     private Resume[] storage;
     private int size;
 
     public ArrayStorage() {
-        storage = new Resume[10000];
+        storage = new Resume[STORAGE_LIMIT];
         size = 0;
     }
 
+    public void clear() {
+        Arrays.fill(storage, 0, size, null);
+        size = 0;
+    }
+
+    public void update(Resume r) {
+        int index = getIndex(r.getUuid().toString());
+        if (index != -1) {
+            storage[index] = r;
+        } else {
+            System.out.println("Ошибка -  вы пытаетесь обновить резюме, которого нет в базе.");
+        }
+    }
+
     public void save(Resume r) {
-        if (getResumeIndex(r.getUuid().toString()) == -1) {
+        if (getIndex(r.getUuid().toString()) == -1) {
             size++;
             if (size <= storage.length) {
                 storage[size - 1] = r;
@@ -27,27 +42,17 @@ public class ArrayStorage {
     }
 
     public Resume get(String uid) {
-        int index = getResumeIndex(uid);
-        Resume result = null;
+        int index = getIndex(uid);
         if (index != -1) {
-            result = storage[index];
+            return storage[index];
         } else {
             System.out.println("Ошибка - запрошено резюме, которого нет в базе.");
         }
-        return result;
-    }
-
-    public void update(Resume r) {
-        int index = getResumeIndex(r.getUuid().toString());
-        if (index != -1) {
-            storage[index] = r;
-        } else {
-            System.out.println("Ошибка -  вы пытаетесь обновить резюме, которого нет в базе.");
-        }
+        return null;
     }
 
     public void delete(String uid) {
-        int index = getResumeIndex(uid);
+        int index = getIndex(uid);
         if (index != -1) {
             System.arraycopy(storage, index + 1, storage, index, size - 1 - index);
             storage[size - 1] = null;
@@ -57,29 +62,20 @@ public class ArrayStorage {
         }
     }
 
-    private int getResumeIndex(String uid) {
-        int index = -1;
-        for(int i = 0; i < size; i++) {
-            if (storage[i].getUuid().toString().equals(uid)) {
-                index = i;
-                break;
-            }
-        }
-        return index;
+    public Resume[] getAll() {
+        return Arrays.copyOfRange(storage, 0, size);
     }
 
     public int size() {
         return size;
     }
 
-    public void clear() {
-        Arrays.fill(storage, 0, storage.length, null);
-        size = 0;
-    }
-
-    public Resume[] getAll() {
-        Resume[] result = new Resume[size];
-        System.arraycopy(storage, 0, result, 0, size);
-        return result;
+    private int getIndex(String uid) {
+        for(int i = 0; i < size; i++) {
+            if (storage[i].getUuid().toString().equals(uid)) {
+                return i;
+            }
+        }
+        return -1;
     }
 }
