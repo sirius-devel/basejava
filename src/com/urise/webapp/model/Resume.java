@@ -35,7 +35,7 @@ public class Resume {
 
     public void setUuid(String uuid) {
         try {
-            this.uuid.fromString(uuid);
+            this.uuid = UUID.fromString(uuid);
         } catch (IllegalArgumentException e) {
             this.uuid = UUID.randomUUID();
             System.out.println("Был задан неверный формат уникального идентификатора uuid, поэтому был сгенерирован " +

@@ -10,17 +10,17 @@ public class MainArray {
 
     public static void main(String[] args) throws IOException {
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-        Resume r = new Resume();
         ArrayStorage storage = new ArrayStorage();
 
         while (true) {
+	    Resume r = newResume();
             System.out.print("Введите одну из команд - (save uuid surname | get uuid | update uuid | delete uuid | size | clear | exit): ");
             String[] params = reader.readLine().trim().toLowerCase().split(" ");
             if (params.length < 1 || params.length > 3) {
                 System.out.println("Неверная команда.");
                 continue;
             }
-            if (params.length == 2 && (params[0].equals("save"))) {
+            if (params.length == 2) {
                 r.setUuid(params[1].intern());
             }
             if (params.length == 3) {
