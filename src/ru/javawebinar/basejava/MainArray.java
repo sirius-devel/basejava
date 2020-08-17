@@ -16,7 +16,7 @@ public class MainArray {
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 
         while (true) {
-            Resume resume = new Resume();
+            Resume resume;
             System.out.print("Введите одну из команд - (list | save uuid | get uuid | update uuid | delete uuid | size | clear | exit): ");
             String[] params = reader.readLine().trim().toLowerCase().split(" ");
             if (params.length < 1 || params.length > 2) {
@@ -24,7 +24,9 @@ public class MainArray {
                 continue;
             }
             if (params.length == 2) {
-                resume.setUuid(params[1].intern());
+                resume = new Resume(params[1].intern());
+            } else {
+                resume = new Resume();
             }
 
             switch (params[0]) {

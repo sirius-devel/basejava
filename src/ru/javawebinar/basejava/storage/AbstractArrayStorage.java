@@ -1,5 +1,8 @@
 package ru.javawebinar.basejava.storage;
 
+import ru.javawebinar.basejava.exception.ExistStorageException;
+import ru.javawebinar.basejava.exception.NotExistStorageException;
+import ru.javawebinar.basejava.exception.StorageException;
 import ru.javawebinar.basejava.model.Resume;
 import java.util.Arrays;
 
@@ -22,30 +25,28 @@ public abstract class AbstractArrayStorage implements Storage {
         if (index >= 0) {
             storage[index] = resume;
         } else {
-            System.out.println("Ошибка -  вы пытаетесь обновить резюме" + resume.getUuid() + ", которого нет в базе.");
+            throw new NotExistStorageException(resume.getUuid());
         }
     }
 
     public void save(Resume resume) {
         int index = getIndex(resume.getUuid());
         if (index < 0) {
-            size++;
-            if (size <= storage.length) {
+            if (size + 1 <= storage.length) {
+                size++;
                 insertElement(resume, index);
-                //storage[size - 1] = resume;
             } else {
-                System.out.println("Ошибка - к сожалению, хранилище резюме полностью заполнено.");
+                throw new StorageException("К сожалению, хранилище резюме полностью заполнено.", resume.getUuid());
             }
         } else {
-            System.out.println("Ошибка -  вы пытаетесь сохранить резюме" + resume.getUuid() + ", которое уже есть в базе. Вызвана процедура обновления.");
+            throw new ExistStorageException(resume.getUuid());
         }
     }
 
     public Resume get(String uuid) {
         int index = getIndex(uuid);
         if (index < 0) {
-            System.out.println("Резюме " + uuid + " не существует");
-            return null;
+            throw new NotExistStorageException(uuid);
         }
         return storage[index];
     }
@@ -57,7 +58,7 @@ public abstract class AbstractArrayStorage implements Storage {
             storage[size - 1] = null;
             size--;
         } else {
-            System.out.println("Возникла ошибка - запрошенного для удаления резюме" + uuid + " нет в базе.");
+            throw new NotExistStorageException(uuid);
         }
     }
 

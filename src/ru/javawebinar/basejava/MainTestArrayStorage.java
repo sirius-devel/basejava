@@ -12,18 +12,12 @@ public class MainTestArrayStorage {
     static final Storage ARRAY_STORAGE = new SortedArrayStorage();
     public static void main(String[] args) {
 
-        Resume resume1 = new Resume();
-        resume1.setUuid("58e0a7d7-eebc-11d8-9669-0800200c9a61");
-        Resume resume2 = new Resume();
-        resume2.setUuid("58e0a7d7-eebc-11d8-9669-0800200c9a65");
-        Resume resume3 = new Resume();
-        resume3.setUuid("58e0a7d7-eebc-11d8-9669-0800200c9a62");
-        Resume resume4 = new Resume();
-        resume4.setUuid("58e0a7d7-eebc-11d8-9669-0800200c9a63");
-        Resume resume5 = new Resume();
-        resume5.setUuid("58e0a7d7-eebc-11d8-9669-0800200c9a64");
-        Resume resume6 = new Resume();
-        resume6.setUuid("58e0a7d7-eebc-11d8-9669-0800200c9a66");
+        Resume resume1 = new Resume("58e0a7d7-eebc-11d8-9669-0800200c9a61");
+        Resume resume2 = new Resume("58e0a7d7-eebc-11d8-9669-0800200c9a65");
+        Resume resume3 = new Resume("58e0a7d7-eebc-11d8-9669-0800200c9a62");
+        Resume resume4 = new Resume("58e0a7d7-eebc-11d8-9669-0800200c9a63");
+        Resume resume5 = new Resume("58e0a7d7-eebc-11d8-9669-0800200c9a64");
+        Resume resume6 = new Resume("58e0a7d7-eebc-11d8-9669-0800200c9a66");
         ARRAY_STORAGE.save(resume1);
         ARRAY_STORAGE.save(resume2);
         ARRAY_STORAGE.save(resume3);
