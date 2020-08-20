@@ -7,6 +7,7 @@ import ru.javawebinar.basejava.storage.Storage;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.List;
 
 public class MainArray {
     //private final static  Storage ARRAY_STORAGE = new ArrayStorage();
@@ -17,16 +18,18 @@ public class MainArray {
 
         while (true) {
             Resume resume;
-            System.out.print("Введите одну из команд - (list | save uuid | get uuid | update uuid | delete uuid | size | clear | exit): ");
+            System.out.print("Введите одну из команд - (list | save uuid fullName| get uuid | update uuid fullName | delete uuid | size | clear | exit): ");
             String[] params = reader.readLine().trim().toLowerCase().split(" ");
-            if (params.length < 1 || params.length > 2) {
+            if (params.length < 1 || params.length > 3) {
                 System.out.println("Неверная команда.");
                 continue;
             }
             if (params.length == 2) {
-                resume = new Resume(params[1].intern());
+                resume = new Resume(params[1].intern(), "dummy");
+            } else if (params.length == 3) {
+                resume = new Resume(params[1].intern(), params[2].intern());
             } else {
-                resume = new Resume();
+                    resume = new Resume();
             }
 
             switch (params[0]) {
@@ -64,7 +67,7 @@ public class MainArray {
     }
 
     public static void printStorage() {
-        Resume[] resumes = ARRAY_STORAGE.getAll();
+        List<Resume> resumes = ARRAY_STORAGE.getAllSorted();
 
         System.out.println("Печатаем содержимое хранилища!");
         System.out.println("----------------------------------------");

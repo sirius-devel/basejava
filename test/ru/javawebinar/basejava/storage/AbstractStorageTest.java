@@ -7,20 +7,23 @@ import ru.javawebinar.basejava.exception.ExistStorageException;
 import ru.javawebinar.basejava.exception.NotExistStorageException;
 import ru.javawebinar.basejava.model.Resume;
 
+import java.util.Arrays;
+import java.util.List;
+
 public abstract class AbstractStorageTest {
     protected Storage storage;
 
     protected static final String UUID_1 = "uuid1";
-    protected static final Resume RESUME_1 = new Resume(UUID_1);
+    protected static final Resume RESUME_1 = new Resume(UUID_1, "name1");
 
     protected static final String UUID_2 = "uuid2";
-    protected static final Resume RESUME_2 = new Resume(UUID_2);
+    protected static final Resume RESUME_2 = new Resume(UUID_2, "name2");
 
     protected static final String UUID_3 = "uuid3";
-    protected static final Resume RESUME_3 = new Resume(UUID_3);
+    protected static final Resume RESUME_3 = new Resume(UUID_3, "name3");
 
     protected static final String UUID_4 = "uuid4";
-    protected static final Resume RESUME_4 = new Resume(UUID_4);
+    protected static final Resume RESUME_4 = new Resume(UUID_4, "name4");
 
     protected  AbstractStorageTest(Storage storage) {
         this.storage = storage;
@@ -57,9 +60,6 @@ public abstract class AbstractStorageTest {
     }
 
     @Test
-    public abstract void getAll() throws Exception;
-
-    @Test
     public void save() throws Exception {
         int sizeBefore = storage.size();
         storage.save(RESUME_4);
@@ -93,6 +93,14 @@ public abstract class AbstractStorageTest {
     @Test(expected = NotExistStorageException.class)
     public void getNotExist() throws Exception {
         storage.get(UUID_4);
+    }
+
+    @Test
+    public void getAllSorted() throws Exception {
+        List<Resume> expectedResumes = Arrays.asList(RESUME_1, RESUME_2, RESUME_3);
+        List<Resume> gettingResumes = storage.getAllSorted();
+        Assert.assertEquals(3, gettingResumes.size());
+        Assert.assertEquals(expectedResumes, gettingResumes);
     }
 
     private void assertGet(Resume r) {

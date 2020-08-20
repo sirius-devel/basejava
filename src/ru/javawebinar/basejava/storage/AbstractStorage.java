@@ -4,36 +4,46 @@ import ru.javawebinar.basejava.exception.ExistStorageException;
 import ru.javawebinar.basejava.exception.NotExistStorageException;
 import ru.javawebinar.basejava.model.Resume;
 
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+
 public abstract class AbstractStorage implements Storage {
 
     public void update(Resume resume) {
-        updateElement(resume, existSearchKey(resume.getUuid()));
+        updateElement(resume, getExistedSearchKey(resume.getUuid()));
     }
 
     public void save(Resume resume) {
-        saveElement(resume, newSearchKey(resume.getUuid()));
+        saveElement(resume, getNotExistedSearchKey(resume.getUuid()));
     }
 
     public Resume get(String uuid) {
-        return getElement(existSearchKey(uuid));
+        return getElement(getExistedSearchKey(uuid));
     }
 
     public void delete(String uuid) {
-        deleteElement(existSearchKey(uuid));
+        deleteElement(getExistedSearchKey(uuid));
     }
 
-    private Object existSearchKey(String uuid) {
+    private Object getExistedSearchKey(String uuid) {
         if (!containElement(getSearchKey(uuid))) {
             throw new NotExistStorageException(uuid);
         }
         return getSearchKey(uuid);
     }
 
-    private Object newSearchKey(String uuid) {
+    private Object getNotExistedSearchKey(String uuid) {
         if (containElement(getSearchKey(uuid))) {
             throw new ExistStorageException(uuid);
         }
         return getSearchKey(uuid);
+    }
+
+    public List<Resume> getAllSorted() {
+        List<Resume> list = getElementsAsList();
+        Collections.sort(list);
+        return list;
     }
 
     protected abstract void updateElement(Resume resume, Object searchKey);
@@ -47,4 +57,6 @@ public abstract class AbstractStorage implements Storage {
     protected abstract Object getSearchKey(String uuid);
 
     protected abstract boolean containElement(Object searchKey);
+
+    protected abstract List<Resume> getElementsAsList();
 }

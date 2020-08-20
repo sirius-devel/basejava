@@ -12,17 +12,13 @@ public class ListStorage extends AbstractStorage {
         storage.clear();
     }
 
-    public Resume[] getAll() {
-        return storage.toArray(new Resume[storage.size()]);
-    }
-
     public int size() {
         return storage.size();
     }
 
     @Override
     protected void updateElement(Resume resume, Object searchKey) {
-        storage.set((Integer) searchKey, resume);
+        storage.set((int) searchKey, resume);
     }
 
     @Override
@@ -32,12 +28,12 @@ public class ListStorage extends AbstractStorage {
 
     @Override
     protected void deleteElement(Object searchKey) {
-        storage.remove((Integer) searchKey);
+        storage.remove((int) searchKey);
     }
 
     @Override
     protected Resume getElement(Object searchKey) {
-        return storage.get((Integer) searchKey);
+        return storage.get((int) searchKey);
     }
 
     @Override
@@ -53,5 +49,10 @@ public class ListStorage extends AbstractStorage {
     @Override
     protected boolean containElement(Object searchKey) {
         return (((Integer) searchKey) >= 0) && (((int) searchKey) < storage.size());
+    }
+
+    @Override
+    protected List<Resume> getElementsAsList() {
+        return new ArrayList<Resume>(storage);
     }
 }
