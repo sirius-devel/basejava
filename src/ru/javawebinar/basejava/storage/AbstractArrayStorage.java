@@ -6,7 +6,7 @@ import ru.javawebinar.basejava.exception.StorageException;
 import ru.javawebinar.basejava.model.Resume;
 import java.util.Arrays;
 
-public abstract class AbstractArrayStorage implements Storage {
+public abstract class AbstractArrayStorage extends AbstractStorage {
     protected static final int STORAGE_LIMIT = 10_000;
     protected Resume[] storage;
     protected int size;
@@ -20,48 +20,6 @@ public abstract class AbstractArrayStorage implements Storage {
         size = 0;
     }
 
-    public void update(Resume resume) {
-        int index = getIndex(resume.getUuid());
-        if (index >= 0) {
-            storage[index] = resume;
-        } else {
-            throw new NotExistStorageException(resume.getUuid());
-        }
-    }
-
-    public void save(Resume resume) {
-        int index = getIndex(resume.getUuid());
-        if (index < 0) {
-            if (size + 1 <= storage.length) {
-                size++;
-                insertElement(resume, index);
-            } else {
-                throw new StorageException("К сожалению, хранилище резюме полностью заполнено.", resume.getUuid());
-            }
-        } else {
-            throw new ExistStorageException(resume.getUuid());
-        }
-    }
-
-    public Resume get(String uuid) {
-        int index = getIndex(uuid);
-        if (index < 0) {
-            throw new NotExistStorageException(uuid);
-        }
-        return storage[index];
-    }
-
-    public void delete(String uuid) {
-        int index = getIndex(uuid);
-        if (index >= 0) {
-            fillDeletedElement(index);
-            storage[size - 1] = null;
-            size--;
-        } else {
-            throw new NotExistStorageException(uuid);
-        }
-    }
-
     public Resume[] getAll() {
         return Arrays.copyOfRange(storage, 0, size);
     }
@@ -70,9 +28,39 @@ public abstract class AbstractArrayStorage implements Storage {
         return size;
     }
 
-    protected abstract void fillDeletedElement(int index);
+    @Override
+    protected void updateElement(Resume resume, Object searchKey) {
+        storage[(int) searchKey] = resume;
+    }
+
+    @Override
+    protected void saveElement(Resume resume, Object searchKey) {
+        if (size + 1 <= storage.length) {
+            size++;
+            insertElement(resume, (int) searchKey);
+        } else {
+            throw new StorageException("К сожалению, хранилище резюме полностью заполнено.", resume.getUuid());
+        }
+    }
+
+    @Override
+    protected Resume getElement(Object searchKey) {
+        return storage[(int) searchKey];
+    }
+
+    @Override
+    protected void deleteElement(Object searchKey) {
+        removeElement((int) searchKey);
+        storage[size - 1] = null;
+        size--;
+    }
+
+    @Override
+    protected boolean containElement(Object searchKey) {
+        return (((int) searchKey) >= 0) && (((int) searchKey) < size());
+    }
 
     protected abstract void insertElement(Resume resume, int index);
 
-    protected abstract int getIndex(String uuid);
+    protected abstract void removeElement(int index);
 }
