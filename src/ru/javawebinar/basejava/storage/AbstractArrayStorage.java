@@ -52,8 +52,8 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
     }
 
     @Override
-    protected boolean containElement(Object searchKey) {
-        return (((int) searchKey) >= 0) && (((int) searchKey) < size());
+    protected boolean isExist(Object searchKey) {
+        return (Integer) searchKey >= 0;
     }
 
     protected abstract void insertElement(Resume resume, Integer index);
@@ -62,6 +62,6 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
 
     @Override
     protected List<Resume> getElementsAsList() {
-        return Arrays.asList(Arrays.copyOf(storage, size));
+        return Arrays.asList(Arrays.copyOfRange(storage, 0, size));
     }
 }
