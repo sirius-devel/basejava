@@ -22,7 +22,7 @@ public class ListStorage extends AbstractStorage {
 
     @Override
     protected void updateElement(Resume resume, Object searchKey) {
-        storage.set((int) searchKey, resume);
+        storage.set((Integer) searchKey, resume);
     }
 
     @Override
@@ -32,16 +32,16 @@ public class ListStorage extends AbstractStorage {
 
     @Override
     protected void deleteElement(Object searchKey) {
-        storage.remove((int) searchKey);
+        storage.remove((Integer) searchKey);
     }
 
     @Override
     protected Resume getElement(Object searchKey) {
-        return storage.get((int) searchKey);
+        return storage.get((Integer) searchKey);
     }
 
     @Override
-    protected Object getSearchKey(String uuid) {
+    protected Integer getSearchKey(String uuid) {
         for (int i = 0; i < storage.size(); i++) {
             if (storage.get(i).getUuid().equals(uuid)) {
                 return i;
@@ -52,6 +52,6 @@ public class ListStorage extends AbstractStorage {
 
     @Override
     protected boolean containElement(Object searchKey) {
-        return (((int) searchKey) >= 0) && (((int) searchKey) < storage.size());
+        return (((Integer) searchKey) >= 0) && (((int) searchKey) < storage.size());
     }
 }

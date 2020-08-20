@@ -8,7 +8,7 @@ import java.util.Map;
 
 public class MapStorageTest extends AbstractStorageTest{
     public MapStorageTest() {
-        super(new MapStorage());
+        super(new MapUuidStorage());
     }
 
     @Override

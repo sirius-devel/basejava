@@ -30,14 +30,14 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
 
     @Override
     protected void updateElement(Resume resume, Object searchKey) {
-        storage[(int) searchKey] = resume;
+        storage[(Integer) searchKey] = resume;
     }
 
     @Override
     protected void saveElement(Resume resume, Object searchKey) {
         if (size + 1 <= storage.length) {
             size++;
-            insertElement(resume, (int) searchKey);
+            insertElement(resume, (Integer) searchKey);
         } else {
             throw new StorageException("К сожалению, хранилище резюме полностью заполнено.", resume.getUuid());
         }
@@ -45,22 +45,22 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
 
     @Override
     protected Resume getElement(Object searchKey) {
-        return storage[(int) searchKey];
+        return storage[(Integer) searchKey];
     }
 
     @Override
     protected void deleteElement(Object searchKey) {
-        removeElement((int) searchKey);
+        removeElement((Integer) searchKey);
         storage[size - 1] = null;
         size--;
     }
 
     @Override
     protected boolean containElement(Object searchKey) {
-        return (((int) searchKey) >= 0) && (((int) searchKey) < size());
+        return (((Integer) searchKey) >= 0) && (((Integer) searchKey) < size());
     }
 
-    protected abstract void insertElement(Resume resume, int index);
+    protected abstract void insertElement(Resume resume, Integer index);
 
-    protected abstract void removeElement(int index);
+    protected abstract void removeElement(Integer index);
 }
