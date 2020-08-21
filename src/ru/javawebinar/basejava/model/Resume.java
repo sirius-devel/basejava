@@ -1,12 +1,16 @@
 package ru.javawebinar.basejava.model;
 
 import java.time.LocalDate;
+import java.util.EnumMap;
+import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
 
 public class Resume implements Comparable<Resume> {
     private final String uuid;
     private final String fullName;
+    private Map<ContactType, String> contacts = new EnumMap<ContactType, String>(ContactType.class);
+    private Map<SectionType, Section> sections = new EnumMap<SectionType, Section>(SectionType.class);
 
     public Resume() {
         uuid = UUID.randomUUID().toString();
@@ -17,9 +21,9 @@ public class Resume implements Comparable<Resume> {
         this(UUID.randomUUID().toString(), fullName);
     }
 
-    public  Resume(String uuid, String fullName) {
-        Objects.requireNonNull(uuid, "uuid must not be null");
-        Objects.requireNonNull(fullName, "fullName must not be null");
+    public Resume(String uuid, String fullName) {
+        Objects.requireNonNull(uuid, "uuid must be not null");
+        Objects.requireNonNull(fullName, "fullName must be not null");
         this.uuid = uuid;
         this.fullName = fullName;
     }
@@ -32,8 +36,32 @@ public class Resume implements Comparable<Resume> {
         return fullName;
     }
 
+    public String getContact(ContactType type) {
+        return contacts.get(type);
+    }
+
+    public Section getSection(SectionType type) {
+        return sections.get(type);
+    }
+
     public String toString() {
         return uuid + " (" + fullName + ')';
+    }
+
+    public Map<ContactType, String> getContacts() {
+        return contacts;
+    }
+
+    public void setContacts(Map<ContactType, String> contacts) {
+        this.contacts = contacts;
+    }
+
+    public Map<SectionType, Section> getSections() {
+        return sections;
+    }
+
+    public void setSections(Map<SectionType, Section> sections) {
+        this.sections = sections;
     }
 
     @Override

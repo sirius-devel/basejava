@@ -6,7 +6,7 @@ import ru.javawebinar.basejava.model.Resume;
 import java.util.Arrays;
 import java.util.List;
 
-public abstract class AbstractArrayStorage extends AbstractStorage {
+public abstract class AbstractArrayStorage extends AbstractStorage<Integer> {
     protected static final int STORAGE_LIMIT = 10_000;
     protected Resume[] storage;
     protected int size;
@@ -25,35 +25,35 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
     }
 
     @Override
-    protected void updateElement(Resume resume, Object searchKey) {
-        storage[(Integer) searchKey] = resume;
+    protected void updateElement(Resume resume, Integer searchKey) {
+        storage[searchKey] = resume;
     }
 
     @Override
-    protected void saveElement(Resume resume, Object searchKey) {
+    protected void saveElement(Resume resume, Integer searchKey) {
         if (size + 1 <= storage.length) {
             size++;
-            insertElement(resume, (Integer) searchKey);
+            insertElement(resume, searchKey);
         } else {
             throw new StorageException("К сожалению, хранилище резюме полностью заполнено.", resume.getUuid());
         }
     }
 
     @Override
-    protected Resume getElement(Object searchKey) {
-        return storage[(Integer) searchKey];
+    protected Resume getElement(Integer searchKey) {
+        return storage[searchKey];
     }
 
     @Override
-    protected void deleteElement(Object searchKey) {
-        removeElement((Integer) searchKey);
+    protected void deleteElement(Integer searchKey) {
+        removeElement(searchKey);
         storage[size - 1] = null;
         size--;
     }
 
     @Override
-    protected boolean isExist(Object searchKey) {
-        return (Integer) searchKey >= 0;
+    protected boolean isExist(Integer searchKey) {
+        return searchKey >= 0;
     }
 
     protected abstract void insertElement(Resume resume, Integer index);
