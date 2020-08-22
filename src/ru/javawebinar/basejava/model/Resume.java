@@ -9,8 +9,8 @@ import java.util.UUID;
 public class Resume implements Comparable<Resume> {
     private final String uuid;
     private final String fullName;
-    private Map<ContactType, String> contacts = new EnumMap<ContactType, String>(ContactType.class);
-    private Map<SectionType, Section> sections = new EnumMap<SectionType, Section>(SectionType.class);
+    private final Map<ContactType, String> contacts = new EnumMap<ContactType, String>(ContactType.class);
+    private final Map<SectionType, Section> sections = new EnumMap<SectionType, Section>(SectionType.class);
 
     public Resume() {
         uuid = UUID.randomUUID().toString();
@@ -52,16 +52,8 @@ public class Resume implements Comparable<Resume> {
         return contacts;
     }
 
-    public void setContacts(Map<ContactType, String> contacts) {
-        this.contacts = contacts;
-    }
-
     public Map<SectionType, Section> getSections() {
         return sections;
-    }
-
-    public void setSections(Map<SectionType, Section> sections) {
-        this.sections = sections;
     }
 
     @Override

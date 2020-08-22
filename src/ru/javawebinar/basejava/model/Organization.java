@@ -4,31 +4,31 @@ import java.time.LocalDate;
 import java.util.Objects;
 
 public class Organization {
-    private final Link link;
+    private final Link homePage;
     private final LocalDate startDate;
     private final LocalDate endDate;
-    private final String subTitle;
-    private final String text;
+    private final String title;
+    private final String description;
 
-    public Organization(String name, String url, LocalDate startDate, LocalDate endDate, String subTitle, String text) {
-        Objects.requireNonNull(startDate, "start date must not be null");
-        Objects.requireNonNull(endDate, "end date must not be null");
-        Objects.requireNonNull(subTitle, "subtitle must not be null");
-        this.link = new Link(name, url);
+    public Organization(String name, String url, LocalDate startDate, LocalDate endDate, String title, String description) {
+        Objects.requireNonNull(startDate, "start date must be not null");
+        Objects.requireNonNull(endDate, "end date must be not null");
+        Objects.requireNonNull(title, "title must be not null");
+        this.homePage = new Link(name, url);
         this.startDate = startDate;
         this.endDate = endDate;
-        this.subTitle = subTitle;
-        this.text = text;
+        this.title = title;
+        this.description = description;
     }
 
     @Override
     public String toString() {
         return "organization (" +
-                "link=" + link +
+                "link=" + homePage +
                 ", startDate=" + startDate +
                 ", endDate=" + endDate +
-                ", subtitle='" + subTitle + '\'' +
-                ", text='" + text + '\'' +
+                ", subtitle='" + title + '\'' +
+                ", text='" + description + '\'' +
                 '}';
     }
 
@@ -39,20 +39,20 @@ public class Organization {
 
         Organization org = (Organization) o;
 
-        if (!link.equals(org.link)) return false;
+        if (!homePage.equals(org.homePage)) return false;
         if (!startDate.equals(org.startDate)) return false;
         if (!endDate.equals(org.endDate)) return false;
-        if (!subTitle.equals(org.subTitle)) return false;
-        return Objects.equals(text, org.text);
+        if (!title.equals(org.title)) return false;
+        return Objects.equals(description, org.description);
     }
 
     @Override
     public int hashCode() {
-        int result = link.hashCode();
+        int result = homePage.hashCode();
         result = 31 * result + startDate.hashCode();
         result = 31 * result + endDate.hashCode();
-        result = 31 * result + subTitle.hashCode();
-        result = 31 * result + (text != null ? text.hashCode() : 0);
+        result = 31 * result + title.hashCode();
+        result = 31 * result + (description != null ? description.hashCode() : 0);
         return result;
     }
 }

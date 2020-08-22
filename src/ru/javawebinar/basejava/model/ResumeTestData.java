@@ -1,8 +1,5 @@
 package ru.javawebinar.basejava.model;
 
-import com.sun.org.apache.xpath.internal.operations.Or;
-
-import javax.xml.soap.Text;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -19,10 +16,10 @@ public class ResumeTestData {
 
         TextSection objectiveSection = new TextSection("");
         TextSection personalSection = new TextSection("");
-        MarkedListSection achievementSection = new MarkedListSection(achievement);
-        MarkedListSection qualificationsSection = new MarkedListSection(qualifications);
-        OrganizationListSection experienceSection = new OrganizationListSection(experience);
-        OrganizationListSection educationSection = new OrganizationListSection(education);
+        ListSection achievementSection = new ListSection(achievement);
+        ListSection qualificationsSection = new ListSection(qualifications);
+        OrganizationSection experienceSection = new OrganizationSection(experience);
+        OrganizationSection educationSection = new OrganizationSection(education);
 
         resume.getContacts().put(ContactType.MOBILE_PHONE, "+7(921) 855-0482");
         resume.getContacts().put(ContactType.SKYPE, "grigory.kislin");
@@ -148,11 +145,11 @@ public class ResumeTestData {
                     break;
                 case ACHIEVEMENT:
                 case QUALIFICATIONS:
-                    ((MarkedListSection) sectionValue).getElements().forEach(System.out::println);
+                    ((ListSection) sectionValue).getItems().forEach(System.out::println);
                     break;
                 case EXPERIENCE:
                 case EDUCATION:
-                    ((OrganizationListSection) sectionValue).getElements().forEach(System.out::println);
+                    ((OrganizationSection) sectionValue).getOrganizations().forEach(System.out::println);
                     break;
                 default:
                     System.out.println("No data in resume");
