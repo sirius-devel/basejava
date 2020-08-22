@@ -26,7 +26,6 @@ public class OrganizationSection extends Section {
         if (o == null || getClass() != o.getClass()) return false;
 
         OrganizationSection section = (OrganizationSection) o;
-
         return organizations.equals(section.organizations);
     }
 

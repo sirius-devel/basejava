@@ -29,6 +29,23 @@ public class MainFile {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+        printFiles(".");
+    }
+
+    public static void printFiles(String dirPath) {
+        File dir = new File(dirPath);
+        String[] list = dir.list();
+        int i;
+        for (i = 0; i < list.length; i++) {
+            File f = new File(dirPath +
+                    File.separator + list[i]);
+            if (f.isFile())
+                System.out.println(dirPath +
+                        File.separator + list[i]);
+            else {
+                printFiles(dirPath + File.separator + list[i]);
+            }
+        }
     }
 }
 
