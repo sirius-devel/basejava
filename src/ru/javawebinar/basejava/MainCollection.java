@@ -2,6 +2,9 @@ package ru.javawebinar.basejava;
 
 import ru.javawebinar.basejava.model.Resume;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.*;
 
 public class MainCollection {
