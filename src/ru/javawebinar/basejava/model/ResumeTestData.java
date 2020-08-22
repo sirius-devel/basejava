@@ -55,17 +55,17 @@ public class ResumeTestData {
         OrganizationSection experienceSection = new OrganizationSection(experience);
         OrganizationSection educationSection = new OrganizationSection(education);
 
-        resume.getContacts().put(ContactType.MOBILE_PHONE, "+7(921) 855-0482");
-        resume.getContacts().put(ContactType.SKYPE, "grigory.kislin");
-        resume.getContacts().put(ContactType.EMAIL, "gkislin@yandex.ru");
-        resume.getContacts().put(ContactType.LINKEDIN,"https://www.linkedin.com/in/gkislin");
-        resume.getContacts().put(ContactType.GITHUB, "https://github.com/gkislin");
-        resume.getContacts().put(ContactType.STACKOVERFLOW, "https://stackoverflow.com/users/548473");
-        resume.getContacts().put(ContactType.HOME_PAGE, "http://gkislin.ru");
+        resume.addContact(ContactType.MOBILE_PHONE, "+7(921) 855-0482");
+        resume.addContact(ContactType.SKYPE, "grigory.kislin");
+        resume.addContact(ContactType.EMAIL, "gkislin@yandex.ru");
+        resume.addContact(ContactType.LINKEDIN,"https://www.linkedin.com/in/gkislin");
+        resume.addContact(ContactType.GITHUB, "https://github.com/gkislin");
+        resume.addContact(ContactType.STACKOVERFLOW, "https://stackoverflow.com/users/548473");
+        resume.addContact(ContactType.HOME_PAGE, "http://gkislin.ru");
 
-        resume.getSections().put(SectionType.OBJECTIVE, new TextSection("Ведущий стажировок и" +
+        resume.addSection(SectionType.OBJECTIVE, new TextSection("Ведущий стажировок и" +
                 "корпоративного обучения по Java Web и Enterprise технологиям."));
-        resume.getSections().put(SectionType.PERSONAL, new TextSection("Аналитический склад ума," +
+        resume.addSection(SectionType.PERSONAL, new TextSection("Аналитический склад ума," +
                 "сильная логика, креативность,инициативность. Пурист кода и архитектуры."));
         achievement.add("С 2013 года: разработка проектов \"Разработка " +
                 "Web приложения\", \"Java Enterprise\", \"Многомодульный maven. Многопоточность. XML (JAXB/StAX). " +
@@ -157,10 +157,10 @@ public class ResumeTestData {
         education.add(new Organization("Заочная физико-техническая школа при МФТИ", "http://www.school.mipt.ru", new Organization.Position(LocalDate.of(1984, 9, 1), LocalDate.of(1987, 6, 30),
                 "Закончил с отличием", "")));
 
-        resume.getSections().put(SectionType.QUALIFICATIONS, qualificationsSection);
-        resume.getSections().put(SectionType.ACHIEVEMENT, achievementSection);
-        resume.getSections().put(SectionType.EDUCATION, educationSection);
-        resume.getSections().put(SectionType.EXPERIENCE, experienceSection);
+        resume.addSection(SectionType.QUALIFICATIONS, qualificationsSection);
+        resume.addSection(SectionType.ACHIEVEMENT, achievementSection);
+        resume.addSection(SectionType.EDUCATION, educationSection);
+        resume.addSection(SectionType.EXPERIENCE, experienceSection);
 
         return resume;
     }
