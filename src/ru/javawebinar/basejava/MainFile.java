@@ -29,22 +29,22 @@ public class MainFile {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        printFiles(".");
+        printDirectoryDeeply(dir, "");
     }
 
-    public static void printFiles(String dirPath) {
-        File dir = new File(dirPath);
+    public static void printDirectoryDeeply(File dir, String space) {
         String[] list = dir.list();
+        space = new StringBuilder().append(space).append("    ").toString();
         int i;
         if (list != null) {
             for (i = 0; i < list.length; i++) {
-                File f = new File(dirPath +
+                File file = new File(dir.getPath() +
                         File.separator + list[i]);
-                if (f.isFile())
-                    System.out.println(dirPath +
-                            File.separator + list[i]);
-                else {
-                    printFiles(dirPath + File.separator + list[i]);
+                if (file.isFile())
+                    System.out.println(space + "File: " + file.getName());
+                else if (file.isDirectory()) {
+                    System.out.println(space +"Directory: " + file.getPath());
+                    printDirectoryDeeply(file, space);
                 }
             }
         }

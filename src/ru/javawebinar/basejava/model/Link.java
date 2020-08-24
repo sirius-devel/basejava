@@ -1,10 +1,12 @@
 package ru.javawebinar.basejava.model;
 
+import java.io.Serializable;
 import java.util.Objects;
 
-public class Link {
+public class Link implements Serializable {
     private final String name;
     private final String url;
+    private static final long serialVersionUID = 1L;
 
     public Link(String name, String url) {
         Objects.requireNonNull(name, "name must not be null");

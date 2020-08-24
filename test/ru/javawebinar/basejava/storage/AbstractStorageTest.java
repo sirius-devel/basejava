@@ -8,11 +8,13 @@ import ru.javawebinar.basejava.exception.NotExistStorageException;
 import ru.javawebinar.basejava.model.Resume;
 import static ru.javawebinar.basejava.ResumeTestData.createResume;
 
+import java.io.File;
 import java.util.Arrays;
 import java.util.List;
 
 public abstract class AbstractStorageTest {
     protected Storage storage;
+    protected static final File STORAGE_DIR = new File("/home/irina/basejava/resumes");
 
     private static final String UUID_1 = "uuid1";
     private static final String UUID_2 = "uuid2";
