@@ -1,6 +1,8 @@
 package ru.javawebinar.basejava.storage;
 
 
+import ru.javawebinar.basejava.storage.serializer.ObjectStreamSerializer;
+
 public class ObjectStreamFileStorageTest extends AbstractStorageTest{
 
     public ObjectStreamFileStorageTest() {
