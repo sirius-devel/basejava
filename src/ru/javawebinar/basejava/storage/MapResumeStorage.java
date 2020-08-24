@@ -36,7 +36,7 @@ public class MapResumeStorage extends AbstractStorage<Resume> {
 
     @Override
     protected Resume getElement(Resume searchKey) {
-        return storage.get(searchKey.getUuid());
+        return searchKey;
     }
 
     @Override
@@ -51,6 +51,6 @@ public class MapResumeStorage extends AbstractStorage<Resume> {
 
     @Override
     protected List<Resume> getElementsAsList() {
-        return new ArrayList(storage.values());
+        return new ArrayList<>(storage.values());
     }
 }

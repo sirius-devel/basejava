@@ -1,9 +1,9 @@
 package ru.javawebinar.basejava;
 
 import ru.javawebinar.basejava.model.Resume;
-import ru.javawebinar.basejava.storage.ArrayStorage;
 import ru.javawebinar.basejava.storage.SortedArrayStorage;
 import ru.javawebinar.basejava.storage.Storage;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -29,7 +29,7 @@ public class MainArray {
             } else if (params.length == 3) {
                 resume = new Resume(params[1].intern(), params[2].intern());
             } else {
-                    resume = new Resume();
+                    resume = new Resume("uuid1", "dummy");
             }
 
             switch (params[0]) {

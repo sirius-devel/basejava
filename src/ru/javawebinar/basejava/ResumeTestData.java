@@ -1,4 +1,6 @@
-package ru.javawebinar.basejava.model;
+package ru.javawebinar.basejava;
+
+import ru.javawebinar.basejava.model.*;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -15,9 +17,9 @@ public class ResumeTestData {
 
         System.out.println("\n------------------------------------------------------------");
 
-        for(Map.Entry<SectionType, Section> section : resume.getSections().entrySet()) {
+        for(Map.Entry<SectionType, AbstractSection> section : resume.getSections().entrySet()) {
             SectionType sectionType = section.getKey();
-            Section sectionValue = section.getValue();
+            AbstractSection sectionValue = section.getValue();
             System.out.println(sectionType + " / " + sectionType.getTitle());
             switch (sectionType) {
                 case PERSONAL:

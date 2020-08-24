@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 public class MapUuidStorage extends AbstractStorage<String > {
-    protected Map<String, Resume> storage = new HashMap<>();
+    private final Map<String, Resume> storage = new HashMap<>();
 
     public void clear() {
         storage.clear();
@@ -51,6 +51,6 @@ public class MapUuidStorage extends AbstractStorage<String > {
 
     @Override
     protected List<Resume> getElementsAsList() {
-        return new ArrayList(storage.values());
+        return new ArrayList<>(storage.values());
     }
 }
