@@ -3,8 +3,11 @@ package ru.javawebinar.basejava.model;
 import java.util.Objects;
 
 public class TextSection extends AbstractSection {
-    protected final String content;
+    protected String content;
     private static final long serialVersionUID = 1L;
+
+    public TextSection() {
+    }
 
     public TextSection(String text) {
         Objects.requireNonNull(text, "content must be not null");
