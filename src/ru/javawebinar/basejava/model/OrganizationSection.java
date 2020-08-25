@@ -35,13 +35,12 @@ public class OrganizationSection extends AbstractSection {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-
-        OrganizationSection section = (OrganizationSection) o;
-        return organizations.equals(section.organizations);
+        OrganizationSection that = (OrganizationSection) o;
+        return organizations.equals(that.organizations);
     }
 
     @Override
     public int hashCode() {
-        return organizations.hashCode();
+        return Objects.hash(organizations);
     }
 }
