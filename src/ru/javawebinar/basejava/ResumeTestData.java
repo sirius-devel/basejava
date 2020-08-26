@@ -65,10 +65,6 @@ public class ResumeTestData {
         resume.addContact(ContactType.STACKOVERFLOW, "https://stackoverflow.com/users/548473");
         resume.addContact(ContactType.HOME_PAGE, "http://gkislin.ru");
 
-        resume.addSection(SectionType.OBJECTIVE, new TextSection("Ведущий стажировок и" +
-                "корпоративного обучения по Java Web и Enterprise технологиям."));
-        resume.addSection(SectionType.PERSONAL, new TextSection("Аналитический склад ума," +
-                "сильная логика, креативность,инициативность. Пурист кода и архитектуры."));
         achievement.add("С 2013 года: разработка проектов \"Разработка " +
                 "Web приложения\", \"Java Enterprise\", \"Многомодульный maven. Многопоточность. XML (JAXB/StAX). " +
                 "Веб сервисы (JAX-RS/SOAP). Удаленное взаимодействие (JMS/AKKA)\". Организация онлайн стажировок " +
@@ -159,10 +155,14 @@ public class ResumeTestData {
         education.add(new Organization("Заочная физико-техническая школа при МФТИ", "http://www.school.mipt.ru", new Organization.Position(LocalDate.of(1984, 9, 1), LocalDate.of(1987, 6, 30),
                 "Закончил с отличием", "")));
 
+        /*resume.addSection(SectionType.OBJECTIVE, new TextSection("Ведущий стажировок и" +
+                "корпоративного обучения по Java Web и Enterprise технологиям."));
+        resume.addSection(SectionType.PERSONAL, new TextSection("Аналитический склад ума," +
+                "сильная логика, креативность,инициативность. Пурист кода и архитектуры."));
         resume.addSection(SectionType.QUALIFICATIONS, qualificationsSection);
         resume.addSection(SectionType.ACHIEVEMENT, achievementSection);
         resume.addSection(SectionType.EDUCATION, educationSection);
-        resume.addSection(SectionType.EXPERIENCE, experienceSection);
+        resume.addSection(SectionType.EXPERIENCE, experienceSection);*/
 
         return resume;
     }
