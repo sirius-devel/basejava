@@ -7,20 +7,21 @@ import ru.javawebinar.basejava.Config;
 import ru.javawebinar.basejava.exception.ExistStorageException;
 import ru.javawebinar.basejava.exception.NotExistStorageException;
 import ru.javawebinar.basejava.model.Resume;
+
+import java.util.*;
+
 import static ru.javawebinar.basejava.ResumeTestData.createResume;
 
 import java.io.File;
-import java.util.Arrays;
-import java.util.List;
 
 public abstract class AbstractStorageTest {
     protected Storage storage;
     protected static final File STORAGE_DIR = Config.get().getStorageDir();
 
-    private static final String UUID_1 = "uuid1";
-    private static final String UUID_2 = "uuid2";
-    private static final String UUID_3 = "uuid3";
-    private static final String UUID_4 = "uuid4";
+    private static final String UUID_1 = UUID.randomUUID().toString();
+    private static final String UUID_2 = UUID.randomUUID().toString();
+    private static final String UUID_3 = UUID.randomUUID().toString();
+    private static final String UUID_4 = UUID.randomUUID().toString();
 
     private static final Resume RESUME_1;
     private static final Resume RESUME_2;
@@ -111,6 +112,7 @@ public abstract class AbstractStorageTest {
     @Test
     public void getAllSorted() throws Exception {
         List<Resume> expectedResumes = Arrays.asList(RESUME_1, RESUME_2, RESUME_3);
+        Collections.sort(expectedResumes);
         List<Resume> gettingResumes = storage.getAllSorted();
         Assert.assertEquals(3, gettingResumes.size());
         Assert.assertEquals(expectedResumes, gettingResumes);
