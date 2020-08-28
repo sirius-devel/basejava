@@ -5,9 +5,58 @@ import ru.javawebinar.basejava.model.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
+import java.time.Month;
 import java.util.Map;
 
 public class ResumeTestData {
+
+    public static final String UUID_1 = UUID.randomUUID().toString();
+    public static final String UUID_2 = UUID.randomUUID().toString();
+    public static final String UUID_3 = UUID.randomUUID().toString();
+    public static final String UUID_4 = UUID.randomUUID().toString();
+
+    public static final Resume R1;
+    public static final Resume R2;
+    public static final Resume R3;
+    public static final Resume R4;
+
+    static {
+        R1 = new Resume(UUID_1, "Name1");
+        R2 = new Resume(UUID_2, "Name2");
+        R3 = new Resume(UUID_3, "Name3");
+        R4 = new Resume(UUID_4, "Name4");
+
+        R1.addContact(ContactType.EMAIL, "mail1@ya.ru");
+        R1.addContact(ContactType.MOBILE_PHONE, "89175467899");
+
+        R4.addContact(ContactType.MOBILE_PHONE, "89113456789");
+        R4.addContact(ContactType.SKYPE, "Skype");
+
+        R1.addSection(SectionType.OBJECTIVE, new TextSection("Objective1"));
+        R1.addSection(SectionType.PERSONAL, new TextSection("Personal data"));
+        R1.addSection(SectionType.ACHIEVEMENT, new ListSection("Achievement11", "Achievement12", "Achievmeent13"));
+        R1.addSection(SectionType.QUALIFICATIONS, new ListSection("Java", "SQL", "JavaScript"));
+        R1.addSection(SectionType.EXPERIENCE,
+                new OrganizationSection(
+                        new Organization("Organization11", "http://Organization11.ru",
+                                new Organization.Position(2005, Month.JANUARY, "position1", "content1"),
+                                new Organization.Position(2001, Month.MARCH, 2005, Month.JANUARY, "position2", "content2"))));
+        R1.addSection(SectionType.EXPERIENCE,
+                new OrganizationSection(
+                        new Organization("Organization12", "http://Organization12.ru",
+                                new Organization.Position(2015, Month.JANUARY, 2020, Month.AUGUST,"position1", "content1"))));
+        R1.addSection(SectionType.EDUCATION,
+                new OrganizationSection(
+                        new Organization("Institute", null,
+                                new Organization.Position(1996, Month.JANUARY, 2000, Month.DECEMBER, "aspirant", null),
+                                new Organization.Position(2001, Month.MARCH, 2005, Month.JANUARY, "student", "IT facultet")),
+                        new Organization("Organization12", "http://Organization12.ru", new Organization.Position(2017, Month.JANUARY, 2020, Month.AUGUST,"position1", "content1"))));
+
+        R2.addContact(ContactType.SKYPE, "skype2");
+        R2.addContact(ContactType.MOBILE_PHONE, "89213456734");
+    }
+
     public static void main(String[] args) {
         Resume resume = createResume("uuid1", "Grigory Kislin");
 
@@ -44,7 +93,7 @@ public class ResumeTestData {
     }
 
     public static Resume createResume(String uuid, String fullName) {
-        Resume resume = new Resume(uuid, fullName);
+        Resume R5 = new Resume(uuid, fullName);
         List<String> achievement = new ArrayList<>();
         List<String> qualifications = new ArrayList<>();
         List<Organization> experience = new ArrayList<>();
@@ -57,13 +106,13 @@ public class ResumeTestData {
         OrganizationSection experienceSection = new OrganizationSection(experience);
         OrganizationSection educationSection = new OrganizationSection(education);
 
-        resume.addContact(ContactType.MOBILE_PHONE, "+7(921) 855-0482");
-        resume.addContact(ContactType.SKYPE, "grigory.kislin");
-        resume.addContact(ContactType.EMAIL, "gkislin@yandex.ru");
-        resume.addContact(ContactType.LINKEDIN,"https://www.linkedin.com/in/gkislin");
-        resume.addContact(ContactType.GITHUB, "https://github.com/gkislin");
-        resume.addContact(ContactType.STACKOVERFLOW, "https://stackoverflow.com/users/548473");
-        resume.addContact(ContactType.HOME_PAGE, "http://gkislin.ru");
+        R5.addContact(ContactType.MOBILE_PHONE, "+7(921) 855-0482");
+        R5.addContact(ContactType.SKYPE, "grigory.kislin");
+        R5.addContact(ContactType.EMAIL, "gkislin@yandex.ru");
+        R5.addContact(ContactType.LINKEDIN,"https://www.linkedin.com/in/gkislin");
+        R5.addContact(ContactType.GITHUB, "https://github.com/gkislin");
+        R5.addContact(ContactType.STACKOVERFLOW, "https://stackoverflow.com/users/548473");
+        R5.addContact(ContactType.HOME_PAGE, "http://gkislin.ru");
 
         achievement.add("С 2013 года: разработка проектов \"Разработка " +
                 "Web приложения\", \"Java Enterprise\", \"Многомодульный maven. Многопоточность. XML (JAXB/StAX). " +
@@ -155,15 +204,15 @@ public class ResumeTestData {
         education.add(new Organization("Заочная физико-техническая школа при МФТИ", "http://www.school.mipt.ru", new Organization.Position(LocalDate.of(1984, 9, 1), LocalDate.of(1987, 6, 30),
                 "Закончил с отличием", "")));
 
-        /*resume.addSection(SectionType.OBJECTIVE, new TextSection("Ведущий стажировок и" +
+        R5.addSection(SectionType.OBJECTIVE, new TextSection("Ведущий стажировок и" +
                 "корпоративного обучения по Java Web и Enterprise технологиям."));
-        resume.addSection(SectionType.PERSONAL, new TextSection("Аналитический склад ума," +
+        R5.addSection(SectionType.PERSONAL, new TextSection("Аналитический склад ума," +
                 "сильная логика, креативность,инициативность. Пурист кода и архитектуры."));
-        resume.addSection(SectionType.QUALIFICATIONS, qualificationsSection);
-        resume.addSection(SectionType.ACHIEVEMENT, achievementSection);
-        resume.addSection(SectionType.EDUCATION, educationSection);
-        resume.addSection(SectionType.EXPERIENCE, experienceSection);*/
+        R5.addSection(SectionType.QUALIFICATIONS, qualificationsSection);
+        R5.addSection(SectionType.ACHIEVEMENT, achievementSection);
+        R5.addSection(SectionType.EDUCATION, educationSection);
+        R5.addSection(SectionType.EXPERIENCE, experienceSection);
 
-        return resume;
+        return R5;
     }
 }
