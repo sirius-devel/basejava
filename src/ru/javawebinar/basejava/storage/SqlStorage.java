@@ -1,20 +1,21 @@
 package ru.javawebinar.basejava.storage;
 
 import ru.javawebinar.basejava.exception.NotExistStorageException;
-import ru.javawebinar.basejava.model.ContactType;
-import ru.javawebinar.basejava.model.Resume;
+import ru.javawebinar.basejava.model.*;
 import ru.javawebinar.basejava.sql.SqlHelper;
 
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class SqlStorage implements Storage {
     private final SqlHelper sqlHelper;
 
     public SqlStorage(String dbUrl, String dbUser, String dbPassword) {
+        try {
+            DriverManager.registerDriver(new org.postgresql.Driver());
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
         sqlHelper = new SqlHelper(() -> DriverManager.getConnection(dbUrl, dbUser, dbPassword));
     }
 
@@ -25,20 +26,37 @@ public class SqlStorage implements Storage {
 
     @Override
     public Resume get(String uuid) {
-        return sqlHelper.execute("select * from resume r left join contact c" +
-                        " on r.uuid = c.resume_uuid where r.uuid =? ",
-                ps -> {
-                    ps.setString(1, uuid);
-                    ResultSet rs = ps.executeQuery();
-                    if (!rs.next()) {
-                        throw new NotExistStorageException(uuid);
-                    }
-                    Resume r = new Resume(uuid, rs.getString("full_name"));
-                    do {
-                        addResumeContact(r, rs);
-                    } while (rs.next());
-                    return r;
-                });
+        return sqlHelper.transactionalExecute(conn -> {
+            Resume r;
+            try (PreparedStatement ps = conn
+                    .prepareStatement( "select * from resume r where r.uuid =? ")) {
+                ps.setString(1, uuid);
+                ResultSet rs = ps.executeQuery();
+                if (!rs.next()) {
+                    throw new NotExistStorageException(uuid);
+                }
+                r = new Resume(uuid, rs.getString("full_name"));
+            }
+            try (PreparedStatement ps = conn
+                    .prepareStatement( "select c.type, c.value from contact c " +
+                            " where c.resume_uuid =? ")) {
+                ps.setString(1, uuid);
+                ResultSet rs = ps.executeQuery();
+                while (rs.next()) {
+                    addResumeContact(r, rs);
+                }
+            }
+            try (PreparedStatement ps = conn
+                    .prepareStatement( "select s.type, s.content from section s " +
+                            " where s.resume_uuid =? ")) {
+                ps.setString(1, uuid);
+                ResultSet rs = ps.executeQuery();
+                while (rs.next()) {
+                    addResumeSection(r, rs);
+                }
+            }
+            return r;
+        });
     }
 
     @Override
@@ -54,6 +72,8 @@ public class SqlStorage implements Storage {
             }
             removeDbContacts(r, conn);
             addDbContacts(r, conn);
+            removeDbSections(r, conn);
+            addDbSections(r, conn);
             return null;
         });
     }
@@ -67,6 +87,7 @@ public class SqlStorage implements Storage {
                 ps.executeUpdate();
             }
             addDbContacts(r, conn);
+            addDbSections(r, conn);
             return  null;
         });
     }
@@ -84,20 +105,32 @@ public class SqlStorage implements Storage {
 
     @Override
     public List<Resume> getAllSorted() {
-        return sqlHelper.execute("select * from resume r left join" +
-                " contact c on r.uuid = c.resume_uuid order by full_name, uuid", ps -> {
-            ResultSet rs = ps.executeQuery();
-            Map<String, Resume> map = new LinkedHashMap<>();
-            while (rs.next()) {
-                String uuid = rs.getString("uuid");
-                Resume resume = map.get(uuid);
-                if (resume == null) {
-                    resume = new Resume(uuid, rs.getString("full_name"));
-                    map.put(uuid, resume);
+        return sqlHelper.transactionalExecute(connection -> {
+            Map<String, Resume> resumeMap = new LinkedHashMap<>();
+            try (PreparedStatement ps = connection.prepareStatement("select * from resume r " +
+                    " order by r.full_name, r.uuid")) {
+                ResultSet rsResume = ps.executeQuery();
+                while (rsResume.next()) {
+                    String uuid = rsResume.getString("uuid");
+                    resumeMap.put(uuid, new Resume(uuid, rsResume.getString("full_name")));
                 }
-                addResumeContact(resume, rs);
             }
-            return new ArrayList<>(map.values());
+            try (PreparedStatement ps = connection.prepareStatement("" +
+                    "select c.resume_uuid, c.type, c.value " +
+                    "from contact c ")) {
+                ResultSet rsContact = ps.executeQuery();
+                while (rsContact.next()) {
+                    addResumeContact(resumeMap.get(rsContact.getString("resume_uuid")), rsContact);
+                }
+            }
+            try (PreparedStatement ps = connection.prepareStatement("select s.resume_uuid, s.type, s.content " +
+                    "from section s ")) {
+                ResultSet rsSection = ps.executeQuery();
+                while (rsSection.next()) {
+                    addResumeSection(resumeMap.get(rsSection.getString("resume_uuid")), rsSection);
+                }
+            }
+            return new ArrayList<>(resumeMap.values());
         });
     }
 
@@ -120,9 +153,34 @@ public class SqlStorage implements Storage {
             ps.executeBatch();
         }
     }
+    private void addDbSections(Resume r, Connection conn) throws SQLException {
+        try (PreparedStatement ps = conn
+                .prepareStatement("insert into section (resume_uuid, type, content) values (?,?,?)")) {
+            for (Map.Entry<SectionType, AbstractSection> e : r.getSections().entrySet()) {
+                if (e.getValue() instanceof TextSection) {
+                    ps.setString(3, ((TextSection) e.getValue()).getText());
+                } else if (e.getValue() instanceof ListSection) {
+                    String sectionText = String.join("\n", ((ListSection) e.getValue()).getItems());
+                    ps.setString(3, sectionText);
+                }
+                ps.setString(1, r.getUuid());
+                ps.setString(2, e.getKey().name());
+                ps.addBatch();
+            }
+            ps.executeBatch();
+        }
+    }
 
     private void removeDbContacts(Resume r, Connection conn) {
         sqlHelper.execute("delete  from contact where resume_uuid=?", ps -> {
+            ps.setString(1, r.getUuid());
+            ps.execute();
+            return null;
+        });
+    }
+
+    private void removeDbSections(Resume r, Connection conn) {
+        sqlHelper.execute("delete  from section where resume_uuid=?", ps -> {
             ps.setString(1, r.getUuid());
             ps.execute();
             return null;
@@ -135,4 +193,18 @@ public class SqlStorage implements Storage {
             r.addContact(ContactType.valueOf(rs.getString("type")), value);
         }
     }
+
+    private void addResumeSection(Resume r, ResultSet rs) throws SQLException {
+        String type = rs.getString("type");
+        String value = rs.getString("value");
+        if (type != null) {
+            if (!value.contains("\n")) {
+                r.addSection(SectionType.valueOf(type), new TextSection(value));
+            } else {
+                r.addSection(SectionType.valueOf(type),
+                        new ListSection(Arrays.asList(value.split("\n"))));
+            }
+        }
+    }
+
 }
