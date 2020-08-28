@@ -1,6 +1,7 @@
 package ru.javawebinar.basejava.web;
 
 import ru.javawebinar.basejava.Config;
+import ru.javawebinar.basejava.model.ContactType;
 import ru.javawebinar.basejava.model.Resume;
 import ru.javawebinar.basejava.storage.Storage;
 
@@ -10,7 +11,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.List;
+import java.io.Writer;
 
 public class ResumeServlet extends HttpServlet {
     private Storage storage;
@@ -32,42 +33,32 @@ public class ResumeServlet extends HttpServlet {
         response.setContentType("text/html; charset=UTF-8");
         String uuid = request.getParameter("uuid");
 //        response.getWriter().write(uuid == null ? "Hello Resumes!" : "Hello " + name + '!');
-        List<Resume> resumeList = storage.getAllSorted();
-        StringBuilder resumeView = new StringBuilder();
-        Resume resume = null;
-        if (uuid != null) {
-            resume = storage.get(uuid);
-        }
-        for (Resume r : resumeList) {
-            resumeView.append("<tr>\n<td>")
-                    .append(r.getUuid())
-                    .append("</td>\n<td>")
-                    .append(r.getFullName())
-                    .append("</td>\n</tr>\n");
-        }
-        response.getWriter().write(uuid == null ?
+        Writer writer = response.getWriter();
+        writer.write(
                 "<html>\n" +
                         "<head>\n" +
-                        "<title>Resume</title>\n" +
+                        "    <meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\">\n" +
+                        "    <link rel=\"stylesheet\" href=\"css/style.css\">\n" +
+                        "    <title>Список всех резюме</title>\n" +
                         "</head>\n" +
                         "<body>\n" +
-                        "<table border=\"1\">\n" +
-                        "<tr>\n" +
-                        "<th>uuid</th>\n" +
-                        "<th>full_name</th>\n" +
-                        "</tr>\n" +
-                        resumeView.toString() +
-                        "</table>\n" +
-                        "</body>\n" +
-                        "</html>" :
-                        "<html>\n" +
-                        "<head>\n" +
-                        "<title>Resume</title>\n" +
-                        "</head>\n" +
-                        "<body>\n" +
-                        resume +
-                        "</body>\n" +
-                        "</html>"
-        );
+                        "<section>\n" +
+                        "<table border=\"1\" cellpadding=\"8\" cellspacing=\"0\">\n" +
+                        "    <tr>\n" +
+                        "        <th>Имя</th>\n" +
+                        "        <th>Email</th>\n" +
+                        "    </tr>\n");
+
+        for (Resume r : storage.getAllSorted()) {
+            writer.write(
+                    "<tr>\n" +
+                            "     <td><a href=\"resume?uuid=" + r.getUuid() + "\">" + r.getFullName() + "</a></td>\n" +
+                            "     <td>" + r.getContact(ContactType.EMAIL) + "</td>\n" +
+                            "</tr>\n");
+        }
+        writer.write("</table>\n" +
+                "</section>\n" +
+                "</body>\n" +
+                "</html>\n");
     }
 }
