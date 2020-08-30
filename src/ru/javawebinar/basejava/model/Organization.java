@@ -21,6 +21,7 @@ public class Organization implements Serializable {
     private Link homePage;
     private List<Position> positions;
     private static final long serialVersionUID = 1L;
+    public static final Organization EMPTY = new Organization("", "", Position.EMPTY);
 
     public Organization() {
         positions = new ArrayList<>();
@@ -35,7 +36,7 @@ public class Organization implements Serializable {
         this.positions = positions;
     }
 
-    public Link getLink() {
+    public Link getHomePage() {
         return homePage;
     }
 
@@ -73,6 +74,7 @@ public class Organization implements Serializable {
         private String title;
         private String description;
         private static final long serialVersionUID = 1L;
+        public static final Position EMPTY = new Position();
 
         public Position() {
         }

@@ -5,6 +5,7 @@ import java.util.Objects;
 public class TextSection extends AbstractSection {
     protected String content;
     private static final long serialVersionUID = 1L;
+    public static final TextSection EMPTY = new TextSection("");
 
     public TextSection() {
     }

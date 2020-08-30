@@ -6,6 +6,7 @@ import org.junit.Test;
 import ru.javawebinar.basejava.Config;
 import ru.javawebinar.basejava.exception.ExistStorageException;
 import ru.javawebinar.basejava.exception.NotExistStorageException;
+import ru.javawebinar.basejava.model.ContactType;
 import ru.javawebinar.basejava.model.Resume;
 
 import java.util.*;
@@ -42,6 +43,9 @@ public abstract class AbstractStorageTest {
 
     @Test
     public void update() throws Exception {
+        R3.addContact(ContactType.EMAIL, "mailr3@gmail.com");
+        R3.addContact(ContactType.SKYPE, "MySkype");
+        R3.addContact(ContactType.MOBILE_PHONE, "89233798801");
         storage.update(R3);
         assertGet(R3);
     }
