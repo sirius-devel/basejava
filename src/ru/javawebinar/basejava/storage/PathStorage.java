@@ -13,6 +13,8 @@ import java.nio.file.Paths;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 
 public class PathStorage extends AbstractStorage<Path> {
     private Path directory;
@@ -29,22 +31,12 @@ public class PathStorage extends AbstractStorage<Path> {
 
     @Override
     public void clear() {
-        try {
-            Files.list(directory).forEach(this::deleteElement);
-        } catch (IOException e) {
-            throw new StorageException("Path delete error");
-        }
+        listFiles(directory).forEach(this::deleteElement);
     }
 
     @Override
     public int size() {
-        int s = 0;
-        try {
-            s = (int) Files.list(directory).count();
-        } catch (IOException e) {
-            throw new StorageException("Directory read error");
-        }
-        return s;
+        return (int) listFiles(directory).count();
     }
 
     @Override
@@ -70,10 +62,10 @@ public class PathStorage extends AbstractStorage<Path> {
     protected void saveElement(Resume resume, Path path) {
         try {
             path = Files.createFile(path);
-            streamSerializer.doWrite(resume, new BufferedOutputStream(Files.newOutputStream(path)));
         } catch (IOException e) {
             throw new StorageException("Couldn't create file " + path.toAbsolutePath(), path.getFileName().toString(), e);
         }
+        updateElement(resume, path);
     }
 
     @Override
@@ -96,12 +88,16 @@ public class PathStorage extends AbstractStorage<Path> {
 
     @Override
     protected List<Resume> getElementsAsList() {
-        List<Resume>  list;
+        return listFiles(directory).map(this::getElement).collect(Collectors.toList());
+    }
+
+    protected Stream<Path> listFiles(Path directory) {
+        Stream<Path> stream;
         try {
-            list = Files.list(directory).map(this::getElement).collect(Collectors.toList());
+            stream = Files.list(directory);
         } catch (IOException e) {
             throw new StorageException("directory read error");
         }
-        return list;
+        return stream;
     }
 }

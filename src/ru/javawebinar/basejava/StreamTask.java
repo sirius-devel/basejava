@@ -3,6 +3,7 @@ package ru.javawebinar.basejava;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class StreamTask {
 
@@ -20,20 +21,12 @@ public class StreamTask {
     }
 
     int minValue(int[] values) {
-        return Arrays.stream(values).distinct().sorted().reduce(0, (x, y) -> 10 * x  + y);
+        return Arrays.stream(values).distinct().sorted().reduce(0, (x, y) -> 10 * x + y);
     }
 
     List<Integer> oddOrEven(List<Integer> integers) {
-        List<Integer> evenInts = new ArrayList<>();
-        List<Integer> oddInts = new ArrayList<>();
-        return integers.stream().reduce(0, (x, y) -> {
-            if (y % 2 == 0) {
-                evenInts.add(y);
-            } else {
-                oddInts.add(y);
-            }
-            return x + y;
-        }) % 2 == 0 ? oddInts : evenInts;
+        int remainder = integers.stream().mapToInt(i -> i).sum() % 2;
+        return integers.stream().filter(num -> num % 2 != remainder)
+                .collect(Collectors.toList());
     }
-
 }

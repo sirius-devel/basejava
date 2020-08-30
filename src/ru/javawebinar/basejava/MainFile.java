@@ -34,7 +34,7 @@ public class MainFile {
 
     public static void printDirectoryDeeply(File dir, String space) {
         String[] list = dir.list();
-        space = new StringBuilder().append(space).append("    ").toString();
+        space = space + "    ";
         int i;
         if (list != null) {
             for (i = 0; i < list.length; i++) {

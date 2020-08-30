@@ -51,7 +51,7 @@ public class ResumeTestData {
                         new Organization("Institute", null,
                                 new Organization.Position(1996, Month.JANUARY, 2000, Month.DECEMBER, "aspirant", null),
                                 new Organization.Position(2001, Month.MARCH, 2005, Month.JANUARY, "student", "IT facultet")),
-                        new Organization("Organization12", "http://Organization12.ru", new Organization.Position(2017, Month.JANUARY, 2020, Month.AUGUST,"position1", "content1"))));
+                        new Organization("Organization12", null)));
 
         R2.addContact(ContactType.SKYPE, "skype2");
         R2.addContact(ContactType.MOBILE_PHONE, "89213456734");

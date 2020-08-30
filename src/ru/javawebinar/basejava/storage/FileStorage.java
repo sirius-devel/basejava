@@ -27,21 +27,16 @@ public class FileStorage extends AbstractStorage<File> {
 
     @Override //clear only files in directory
     public void clear() {
-        File[] files = directory.listFiles();
-        if(files != null) {
-            for(File file : files) {
-                deleteElement(file);
-            }
+        File[] files = listFiles(directory);
+        for(File file : files) {
+            deleteElement(file);
         }
     }
 
     @Override //directory contains only files
     public int size() {
-        String[] list = directory.list();
-        if (list == null) {
-            throw new StorageException("read directory error");
-        }
-        return list.length;
+        File[] files = listFiles(directory);
+        return files.length;
     }
 
     @Override
@@ -57,10 +52,10 @@ public class FileStorage extends AbstractStorage<File> {
     protected void saveElement(Resume resume, File file){
         try {
             file.createNewFile();
-            streamSerializer.doWrite(resume, new BufferedOutputStream(new FileOutputStream(file)));
         } catch (IOException e) {
             throw new StorageException("couldn't create file " + file.getAbsolutePath(), file.getName(), e);
         }
+        updateElement(resume, file);
     }
 
     @Override
@@ -91,14 +86,19 @@ public class FileStorage extends AbstractStorage<File> {
 
     @Override
     protected List<Resume> getElementsAsList() {
-        File[] files = directory.listFiles();
-        if (files == null) {
-            throw new StorageException("read directory error");
-        }
+        File[] files = listFiles(directory);
         List<Resume> list = new ArrayList<>(files.length);
         for (File file : files) {
             list.add(getElement(file));
         }
         return list;
+    }
+
+    protected File[] listFiles(File directory) {
+        File[] files = directory.listFiles();
+        if (files == null) {
+            throw new StorageException("read directory error");
+        }
+        return files;
     }
 }
